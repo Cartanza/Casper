@@ -28,6 +28,7 @@ production stylesheet in assets/built/screen.css
 
 /* Import CSS reset and base styles */
 @import "global.css";
+@import "cartanza.css";
 
 :root {
 
@@ -42,7 +43,7 @@ production stylesheet in assets/built/screen.css
     --color-border: #e1e1e1;
     --color-wash: #e5eff5;
     --color-darkmode: #151719;
-
+    --container-width: 1200px;
     /*
     An accent color is also set by Ghost itself in
     Ghost Admin > Settings > Brand
@@ -83,7 +84,6 @@ production stylesheet in assets/built/screen.css
 /* Centered content container blocks */
 .inner {
     margin: 0 auto;
-    max-width: 1200px;
     width: 100%;
 }
 
@@ -113,8 +113,7 @@ production stylesheet in assets/built/screen.css
     z-index: 100;
     display: flex;
     align-items: center;
-    padding-top: calc(19vmin + 44px);
-    padding-bottom: 19vmin;
+    padding-top: calc(6vmin + 44px);
     text-align: center;
     color: var(--color-darkgrey);
 }
@@ -168,8 +167,8 @@ production stylesheet in assets/built/screen.css
     font-weight: 800;
 }
 
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .site-title {
-    font-family: var(--gh-font-heading, var(--font-serif));
+.has-serif-title .site-title {
+    font-family: var(--font-serif);
 }
 
 .has-cover .site-title {
@@ -191,14 +190,6 @@ production stylesheet in assets/built/screen.css
     font-size: 6rem;
     font-weight: 700;
     line-height: 1.1;
-}
-
-.site-description:first-child {
-    font-family: var(--gh-font-heading, var(--font-sans));
-}
-
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .site-description:first-child {
-    font-family: var(--gh-font-heading, var(--font-serif));
 }
 
 :is(.site-logo, .site-title) + .site-description {
@@ -414,7 +405,6 @@ production stylesheet in assets/built/screen.css
 
 .gh-head-logo {
     display: block;
-    font-family: var(--gh-font-heading, var(--font-sans));
     font-weight: 800;
     font-size: 2.6rem;
     letter-spacing: -0.02em;
@@ -485,13 +475,6 @@ production stylesheet in assets/built/screen.css
     width: 24px;
     height: 24px;
 }
-
-@media (min-width: 992px) {
-    body:not(.is-dropdown-loaded) .gh-head-menu .nav > li {
-        opacity: 0;
-    }
-}
-
 
 /* Dropdown
 /* ---------------------------------------------------------- */
@@ -995,8 +978,8 @@ production stylesheet in assets/built/screen.css
     margin-top: 0;
 }
 
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .post-card-title {
-    font-family: var(--gh-font-heading, var(--font-serif));
+.has-serif-title .post-card-title {
+    font-family: var(--font-serif);
     letter-spacing: -0.005em;
 }
 
@@ -1023,8 +1006,8 @@ production stylesheet in assets/built/screen.css
     word-break: break-word;
 }
 
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .post-card-excerpt {
-    font-family: var(--gh-font-body, var(--font-sans));
+.has-sans-body .post-card-excerpt {
+    font-family: var(--font-sans);
 }
 
 .post-card:not(.post-card-large):not(.post-card-full):not(.dynamic):not(.no-image) .post-card-excerpt {
@@ -1080,6 +1063,7 @@ production stylesheet in assets/built/screen.css
 
 .author-list {
     display: flex;
+    flex-wrap: wrap;
     margin: 0 0 0 4px;
     padding: 0;
     list-style: none;
@@ -1259,8 +1243,8 @@ html.no-infinite-scroll .pagination {
     color: var(--color-darkgrey);
 }
 
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .article-title {
-    font-family: var(--gh-font-heading, var(--font-serif));
+.has-serif-title .article-title {
+    font-family: var(--font-serif);
 }
 
 .article-excerpt {
@@ -1311,7 +1295,7 @@ use it for applying any other styles. */
 .gh-canvas,
 .kg-width-full.kg-content-wide {
     --gap: max(4vmin, 20px);
-    --main: min(var(--content-width, 720px), 100% - var(--gap) * 2);
+    --main: min(var(--content-width, 1200px), 100% - var(--gap) * 2);
     --wide: minmax(0, calc((var(--container-width, 1200px) - var(--content-width, 720px)) / 2));
     --full: minmax(var(--gap), 1fr);
 
@@ -1366,8 +1350,8 @@ headings, text, images and lists. We deal with cards lower down. */
     color: var(--color-darkgrey);
 }
 
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .gh-content > [id] {
-    font-family: var(--gh-font-heading, var(--font-serif));
+.has-serif-title .gh-content > [id] {
+    font-family: var(--font-serif);
 }
 
 /* Add back a top margin to all headings, unless a heading
@@ -1404,7 +1388,7 @@ is the very first element in the post content */
 .gh-content > ul,
 .gh-content > dl,
 .gh-content > p {
-    font-family: var(--gh-font-body, var(--font-serif));
+    font-family: var(--font-serif);
     font-weight: 400;
     font-size: 2rem;
     line-height: 1.6em;
@@ -1448,16 +1432,16 @@ is the very first element in the post content */
     font-size: 2.0rem;
 }
 
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content > blockquote,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content > ol,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content > ul,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content > dl,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content > p,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content .kg-callout-card .kg-callout-text,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content .kg-toggle-card .kg-toggle-content > ol,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content .kg-toggle-card .kg-toggle-content > ul,
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content .kg-toggle-card .kg-toggle-content > p {
-    font-family: var(--gh-font-body, var(--font-sans));
+.has-sans-body .gh-content > blockquote,
+.has-sans-body .gh-content > ol,
+.has-sans-body .gh-content > ul,
+.has-sans-body .gh-content > dl,
+.has-sans-body .gh-content > p,
+.has-sans-body .gh-content .kg-callout-card .kg-callout-text,
+.has-sans-body .gh-content .kg-toggle-card .kg-toggle-content > ol,
+.has-sans-body .gh-content .kg-toggle-card .kg-toggle-content > ul,
+.has-sans-body .gh-content .kg-toggle-card .kg-toggle-content > p {
+    font-family: var(--font-sans);
 }
 
 .gh-content > ul,
@@ -1577,8 +1561,8 @@ except for when immediately preceeded by a heading */
     cursor: pointer;
 }
 
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .kg-toggle-card .kg-toggle-heading-text {
-    font-family: var(--gh-font-heading, var(--font-serif));
+.has-serif-title .kg-toggle-card .kg-toggle-heading-text {
+    font-family: var(--font-serif);
 }
 
 .gh-content .kg-callout-card-accent a {
@@ -1590,8 +1574,8 @@ except for when immediately preceeded by a heading */
     color: var(--color-midgrey);
 }
 
-.has-sans-body:not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .kg-blockquote-alt {
-    font-family: var(--gh-font-body, var(--font-sans));
+.has-sans-body .kg-blockquote-alt {
+    font-family: var(--font-sans);
 }
 
 .kg-card.kg-header-card.kg-style-dark {
@@ -1599,11 +1583,11 @@ except for when immediately preceeded by a heading */
 }
 
 .kg-header-card.kg-style-light h2.kg-header-card-header {
-    color: color-mod(var(--color-darkgrey) l(-5%));
+    color: var(--color-darkgrey);
 }
 
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .kg-header-card h2.kg-header-card-header {
-    font-family: var(--gh-font-heading, var(--font-serif));
+.has-serif-title .kg-header-card h2.kg-header-card-header {
+    font-family: var(--font-serif);
 }
 
 
@@ -1783,12 +1767,6 @@ iframe.instagram-media + script + :not([id]) {
 }
 
 @media (max-width: 767px) {
-    .article-byline-content {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-
     .article-byline-content .author-list {
         padding-right: 12px;
     }
@@ -1812,8 +1790,8 @@ iframe.instagram-media + script + :not([id]) {
     font-weight: 800;
 }
 
-.has-serif-title:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]) .footer-cta-title {
-    font-family: var(--gh-font-heading, var(--font-serif));
+.has-serif-title .footer-cta-title {
+    font-family: var(--font-serif);
 }
 
 .footer-cta-button {
@@ -2068,7 +2046,7 @@ iframe.instagram-media + script + :not([id]) {
     padding-top: 48px;
     padding-bottom: 140px;
     color: #fff;
-    background: color-mod(var(--color-darkgrey) l(-5%));
+    background: var(--color-darkgrey);
 }
 
 .page-template .site-footer {
@@ -2271,6 +2249,14 @@ html.dark-mode .gh-content :not(pre) > code {
     color: #fff;
 }
 
+html.dark-mode .gh-content strong {
+    color: #fff;
+}
+
+html.dark-mode .gh-content em {
+    color: #fff;
+}
+
 html.dark-mode .gh-content code {
     color: #fff;
     background: #000;
@@ -2317,7 +2303,7 @@ html.dark-mode .site-archive-header .no-image {
 }
 
 html.dark-mode .kg-header-card.kg-style-dark {
-    background: color-mod(var(--color-darkgrey) l(-5%));
+    background: var(--color-darkgrey);
 }
 
 html.dark-mode .kg-header-card.kg-style-light {
@@ -2465,6 +2451,14 @@ html.dark-mode .footer-cta-title {
         color: #fff;
     }
 
+    html.auto-color .gh-content strong {
+        color: #fff;
+    }
+
+    html.auto-color .gh-content em {
+        color: #fff;
+    }
+
     html.auto-color .gh-content code {
         color: #fff;
         background: #000;
@@ -2511,7 +2505,7 @@ html.dark-mode .footer-cta-title {
     }
 
     html.auto-color .kg-header-card.kg-style-dark {
-        background: color-mod(var(--color-darkgrey) l(-5%));
+        background: var(--color-darkgrey);
     }
 
     html.auto-color .kg-header-card.kg-style-light {
