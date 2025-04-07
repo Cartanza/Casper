@@ -101,6 +101,21 @@
     z-index: 1100;
   }
 
+  .cartanza-radio-option {
+    display: flex;
+    align-items: center;
+  }
+  .cartanza-field-error input,
+  .cartanza-field-error select,
+  .cartanza-field-error textarea {
+      border-color: red !important;
+  }
+
+  .cartanza-error-message {
+      color: red;
+      font-size: 0.8em;
+  }
+
   .show-header-dropdown {
     -webkit-transform: scale(1);
     transform: scale(1);
