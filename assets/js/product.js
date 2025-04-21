@@ -261,7 +261,7 @@ function renderForm(container, form, formCode) {
                 fieldWrapper.setAttribute('data-required', 'true');
             }
             const label = document.createElement('label');
-            label.textContent = field.title;
+            label.textContent = field.title + ':';
             label.className = 'gh-portal-input-label';
             fieldWrapper.appendChild(label);
 

@@ -89,11 +89,12 @@
                 <p>You currently have a free membership, upgrade to a paid subscription for full access.</p>
               {{else}}
                 <h3>Membership: {{@member.subscriptions.[0].tier.name}}</h3>
-                <p>{{@member.subscriptions.[0].plan.nickname}} - Expires: {{date @member.subscriptions.[0].tier.expiry_at "dd mmm YYYY"}}</p>
+                <p>{{@member.subscriptions.[0].plan.nickname}} - Trial end: {{date @member.subscriptions.[0].trial_end_at "dd mmm YYYY"}}</p>
+                <p>{{@member.subscriptions.[0].plan.nickname}} - Renews: {{date @member.subscriptions.[0].current_period_end "dd mmm YYYY"}}</p>
               {{/if}}
             </div>
             <div style="margin-bottom: .5em;flex-direction: column;display: flex;justify-content: flex-end;">
-              <a name="view-plans" href="/account/#/portal/account/plans/" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;">
+              <a name="view-plans" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;" onclick="openViewPlans(event)">
                 <span>
                   {{#if (eq @member.status "free")}}
                     View plans
@@ -130,13 +131,187 @@
               </div>
             </div>
             <div style="display: flex;align-items: center;color: green;margin-top:15px;">
-              <div class="gh-portal-for-switch" data-test-switch="switch-input">
+              <div class="gh-portal-for-switch" data-test-switch="switch-input" style="width:40px;">
                 <button type="button" onclick="toggleEditNameEmail()" aria-label="Edit" style="background: white;border: none;">
                     <i class="fa fa-2x fa-pencil" aria-hidden="true" style="color:var(--ghost-accent-color);"></i>
                 </button>
               </div>
             </div>
           </section>
+
+
+
+
+
+        {{#unless (eq @member.status "free")}}
+          <section class="gh-portal-list-toggle-wrapper" data-testid="toggle-wrapper">
+            <div class="gh-portal-list-detail">
+              <div id="site_name_slug_display" style="display:flex;">
+                <div style="width: 50%;">
+                <h3 style="margin: 0.5em 0px 0.5em;">Site name: <span id="site_name_display">{{customer.member.shops.[0].name}}</span></h3>
+                <p><strong>Site domain:</strong>
+                {{#if customer.member.shops.[0].slug}}
+                  {{#if (eq customer.member.shops.[0].status "active")}}
+                    <a href="https://{{customer.member.shops.[0].slug}}.{{domainsuffix}}/ghost" target="_blank" style="color: blue;font-weight: bold;">{{customer.member.shops.[0].slug}}.{{domainsuffix}}</a>
+                  {{else}}
+                    <span id="site_slug_display">{{customer.member.shops.[0].slug}}</span>.{{domainsuffix}}</p>
+                  {{/if}}
+                {{else}}
+                  <span id="site_slug_display">{{customer.member.shops.[0].slug}}</span></p>
+                {{/if}}
+                <p><strong>Site status:</strong>
+                {{#if customer.member.shops.[0].status}}
+                  <span  id="site_slug_display" 
+                    style="text-transform: uppercase;padding: 5px;border-radius: 8px;background-color:{{#if (eq customer.member.shops.[0].status "pending")}}pink{{else}}green{{/if}};">
+                    {{customer.member.shops.[0].status}}
+                  </span>
+                {{else}}
+                  <span  id="site_slug_display" 
+                    style="text-transform: uppercase;padding: 5px;background-color:pink;">
+                    pending
+                  </span>
+                {{/if}}
+                </p>
+                </div>
+                {{#unless customer.member.shops.[0].status}}
+                <div style="margin-bottom: .5em;flex-direction: column;display:flex;padding: 1em;background-color: yellow;border-radius: 16px;text-align: center;width: 50%;">
+                    <h3>
+                      START HERE TO ACTIVATE YOUR DOMAIN
+                    </h3>
+                </div>
+                {{/unless}}
+                {{#if (eq customer.member.shops.[0].status "pending")}}
+                <div style="margin-bottom: .5em;flex-direction: column;display:flex;justify-content:flex-end;width: 50%;">
+                  <a name="view-plans" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;" onclick="openActivateModal(event)">
+                    <span>
+                      Activate
+                    </span>
+                  </a>
+                </div>
+                {{/if}}
+                {{#if (eq customer.member.shops.[0].status "active")}}
+                {{#if (eq @member.subscriptions.[0].tier.id customer.member.shops.[0].product.id)}}
+                  <div style="margin: auto;width: 50%;">
+                  {{#if (eq (date format="YYYY-MM-DD-HH") (date customer.member.shops.[0].created_at format="YYYY-MM-DD-HH"))}}
+                        <h3 style="margin-bottom: .5em;padding: 1em;background-color: yellow;border-radius: 16px;text-align: center;">
+                        NOTE: IT CAN TAKE UP TO 5 or 10 MINUTES TO CREATE YOUR SITE. CHECK THIS LINK ON THE LEFT AFTER A FEW MINUTES.
+                        </h3>
+                  {{/if}}
+                    <a name="view-plans" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;" onclick="openRestartModal(event)">
+                      <span>
+                        Restart
+                      </span>
+                    </a>
+                  </div>
+                {{/if}}
+                {{/if}}
+                {{#if customer.member.shops.[0]}}
+                  {{#unless (eq @member.subscriptions.[0].tier.id customer.member.shops.[0].product.id)}}
+                  <div style="margin-bottom: .5em;flex-direction: column;padding: 1em;background-color: yellow;border-radius: 16px;text-align: center;justify-items: center;width: 50%;">
+                      <h3>
+                        CLICK HERE TO ACTIVATE YOUR PLAN CHANGE
+                      </h3>
+                      <a name="view-plans" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;" onclick="openActivateModal(event)">
+                      <span>
+                        Restart to apply
+                      </span>
+                    </a>
+                  </div>
+                  {{/unless}}
+                {{/if}}
+              </div>
+              <div id="site_name_slug_input" style="display:none;">
+                <div style="width: 80%;">
+                  <div class="gh-portal-input-label container"><label for="site_name_input" class="gh-portal-input-label"> Site name </label></div>
+                  <input data-test-input="site_name_input" id="site_name_input" class="gh-portal-input" type="text" name="site[name]"
+                    placeholder="My Amazing Blog" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Site name" oninput="handleSiteNameChange(event)"
+                    value="{{customer.member.shops.[0].name}}">
+                </div>
+                <div style="width: 80%;">
+                  <div class="gh-portal-input-label container"><label for="site_slug_input" class="gh-portal-input-label"> Site slug </label></div>
+                  <input data-test-input="site_slug" id="site_slug_input" class="gh-portal-input" type="text" name="site[slug]"
+                    placeholder="amazing" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Site slug" onInput="handleSiteSlugChange(event)"
+                    value="{{customer.member.shops.[0].slug}}">
+                </div>
+                <div style="width: 80%;">
+                  <div class="gh-portal-input-label container"><label for="site_password_input" class="gh-portal-input-label"> Site password </label></div>
+                  <input data-test-input="site_password_input" id="site_password_input" class="gh-portal-input" type="password" name="site[password]"
+                    autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Site password"
+                    value="">
+                </div>
+              </div>
+            </div>
+            <div style="display: flex;align-items: center;color: green;margin-top:15px;">
+              <div class="gh-portal-for-switch" data-test-switch="switch-input" style="width:40px;">
+              {{#unless (eq customer.member.shops.[0].status "active")}}
+                <button type="button" onclick="toggleEditSite()" aria-label="Edit" style="background: white;border: none;">
+                    <i class="fa fa-2x fa-pencil" aria-hidden="true" style="color:var(--ghost-accent-color);"></i>
+                </button>
+              {{/unless}}
+              </div>
+            </div>
+          </section>
+
+
+      {{#if (eq customer.member.shops.[0].status "active")}}
+          <div id="custom_domain_message"></div>
+          <section class="gh-portal-list-toggle-wrapper" data-testid="toggle-wrapper" style="display:flex;">
+            <div class="gh-portal-list-detail">
+              <div id="site_custom_domain_display" style="display:flex;">
+                <div style="width: 50%;">
+                <h3 style="margin: 0.5em 0px 0em;">Custom domain(<span onclick="openDnsModal(event)" style="color:blue;">instructions</span>):</h3>
+                <p>
+                  <strong>Domain name:</strong>
+                  <a href="https://{{customer.member.shops.[0].domain}}/ghost" target="_blank" style="color: blue;font-weight: bold;"><span id="site_custom_domain_display_value">{{customer.member.shops.[0].domain}}</span></a>
+                  <p>
+                  <strong>Domain status:</strong>
+                    <span  id="site_domain_status_display"
+                      style="text-transform: uppercase;padding: 5px;border-radius: 8px;background-color:{{#if (eq customer.member.shops.[0].domain_status "unverified")}}pink{{/if}}{{#if (eq customer.member.shops.[0].domain_status "verified")}}green{{/if}};">
+                      {{customer.member.shops.[0].domain_status}}
+                    </span>
+                  </p>
+                </p>
+                </div>
+                {{#if (eq customer.member.shops.[0].domain_status "unverified")}}
+                  <div style="margin: auto;width: 50%;" id="domain_verify_button">
+                      <button name="verify" id="button_verify" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;" onclick="verifyDomain(event)">
+                        <span>
+                          <i class="fa fa-spinner fa-spin left" style="display:none;"></i>
+                          Verify
+                        </span>
+                      </button>
+                  </div>
+                {{/if}}
+              </div>
+              <div id="site_custom_domain_input" style="display:none;">
+                <div style="width: 80%;">
+                  <div class="gh-portal-input-label container"><label for="custom_domain_input" class="gh-portal-input-label"> Custom domain name </label></div>
+                  <input data-test-input="custom_domain_input" id="custom_domain_input" class="gh-portal-input" type="text" name="site[domain]"
+                    placeholder="example.com" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Custom site name"
+                    value="{{customer.member.shops.[0].domain}}">
+                </div>
+              </div>
+            </div>
+
+
+            <div style="display: flex;align-items: center;color: green;margin-top:15px;">
+              <div class="gh-portal-for-switch" data-test-switch="switch-input" style="width:40px;">
+                <button type="button" onclick="toggleEditCustom()" aria-label="Edit" style="background: white;border: none;">
+                    <i class="fa fa-2x fa-pencil" aria-hidden="true" style="color:var(--ghost-accent-color);"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+        {{/if}}
+        {{/unless}}
+
+
+
+
+
+
+
+
           {{#foreach newsletters as |newsletter|}}
           <section class="gh-portal-list-toggle-wrapper" data-testid="toggle-wrapper">
             <div class="gh-portal-list-detail">
@@ -170,7 +345,7 @@
         </div>
         <div style="display:flex;">
           <div style="flex-grow:1;margin-top:20px;">
-            <button name="submit" id="button-account" onclick="logout(event)" class="gh-portal-btn" style="">
+            <button name="submit" id="button-logout" onclick="logout(event)" class="gh-portal-btn" style="background: var(--ghost-accent-color);color: white;">
               <span>
                 <i class="fa fa-user left"></i>
                 Sign out
@@ -178,7 +353,7 @@
             </button>
           </div>
           <div class="submit" style="margin-top:20px;">					
-            <button name="submit" id="button-account" type="submit" class="gh-portal-btn gh-portal-btn-branded" style="">
+            <button name="submit" id="button-save" type="submit" class="gh-portal-btn gh-portal-btn-branded" style="background: var(--ghost-accent-color);color: white;">
               <span>
                 <i class="fa fa-user left"></i>
                 Save
@@ -259,6 +434,94 @@
       </div>
 </div>
 
+<style>
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 20px;
+  justify-items:center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+</style>
+
+<div id="activate_modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeActivateModal(event)">&times;</span>
+    <h2 style="text-align:center;margin: 1.5em 0.5em 1.5em 0.5em;">
+      {{#if (eq @member.subscriptions.[0].tier.id customer.member.shops.[0].product.id)}}
+        Note: Once you activate your site, you can no longer change your site slug, which will form the prefix part of your {{domainsuffix}} domain name.
+      {{else}}
+        Note: This will apply your plan change and restart your site. This could take a few minutes.
+      {{/if}}
+      <br/>Are you Ready?</h2>
+    <a name="view-plans" href="/account/activate" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;text-align:center;">
+      <span>
+        Activate
+      </span>
+    </a>
+  </div>
+</div>
+
+<div id="restart_modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeRestartModal(event)">&times;</span>
+    <h2 style="text-align:center;margin: 1.5em 0.5em 1.5em 0.5em;">
+      Note: This will apply any changes you've made and restart your site. This could take a few minutes, and your members may experience a short outage.
+      <br/>Are you Ready?</h2>
+    <a name="view-plans" href="/account/activate" class="gh-portal-btn gh-portal-btn-branded" style="display: flex;background: var(--ghost-accent-color);color: white;width: 300px;text-align:center;">
+      <span>
+        Restart
+      </span>
+    </a>
+  </div>
+</div>
+
+<div id="dns_modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeDnsModal(event)">&times;</span>
+    <h2 style="text-align:center;margin: 1.5em 0.5em 1.5em 0.5em;">DNS Instructions</h2>
+    <div>
+      <strong>Add these two records where you registered your domain:</strong>
+      <p>Record type:<strong>CNAME</strong></p>
+      <p>Host:<strong>www</strong></p>
+      <p>Value:<strong>{{customer.member.shops.[0].slug}}.{{domainsuffix}}</strong></p>
+      <p>&nbsp;</p>
+      <p>Record type:<strong>A</strong></p>
+      <p>Host:<strong>@</strong></p>
+      <p>Value:<strong>{{customer.member.shops.[0].host.ip}}</strong></p>
+    </div>
+  </div>
+</div>
 
 <script>
   function toggleEditNameEmail() {
@@ -279,8 +542,184 @@
     }
   }
 
+  function toggleEditSite() {
+    const siteNameSlugInput = document.getElementById("site_name_slug_input");
+    const siteNameSlugDisplay = document.getElementById("site_name_slug_display");
+    const nameInput = document.getElementById("site_name_input");
+    const slugInput = document.getElementById("site_slug_input");
+    const nameDisplayValue = document.getElementById("site_name_display");
+    const slugDisplayValue = document.getElementById("site_slug_display");
+    if (siteNameSlugInput.style.display == "none") {
+        siteNameSlugInput.style.display = "block";
+        siteNameSlugDisplay.style.display = "none";
+    } else {
+        siteNameSlugInput.style.display = "none";
+        siteNameSlugDisplay.style.display = "flex";
+        nameDisplayValue.innerHTML = nameInput.value;
+        slugDisplayValue.innerHTML = slugInput.value;
+    }
+  }
+
+  function toggleEditCustom() {
+    const customNameDisplay = document.getElementById("site_custom_domain_display");
+    const customNameDisplayValue = document.getElementById("site_custom_domain_display_value");
+    const siteCustomNameInput = document.getElementById("site_custom_domain_input");
+    const customNameInput = document.getElementById("custom_domain_input");
+    const domainStatusDisplayValue = document.getElementById("site_domain_status_display");
+    const domainVerifyButton = document.getElementById("domain_verify_button");
+    
+    if (siteCustomNameInput.style.display == "none") {
+        siteCustomNameInput.style.display = "block";
+        customNameDisplay.style.display = "none";
+    } else {
+        siteCustomNameInput.style.display = "none";
+        customNameDisplay.style.display = "flex";
+        console.log(customNameDisplayValue.innerHTML);
+        console.log(customNameInput.value);
+        customNameDisplayValue.innerHTML = customNameInput.value;
+        if('{{customer.member.shops.[0].domain}}' != customNameInput.value) {
+          domainStatusDisplayValue.innerHTML = "unverified";
+          domainStatusDisplayValue.style.backgroundColor = "pink";
+          domainVerifyButton.style.display = "none";
+        }
+    }
+  }
+
   function viewPlans(event) {
     event.preventDefault();
     window.location.href = '/account/#/portal/account/plans/';
+  }
+
+  function handleSiteNameChange(event) {
+    const nameInput = document.getElementById("site_name_input");
+    const slugInput = document.getElementById("site_slug_input");
+    const allowedChars = /^[a-zA-Z0-9 \-]*$/;
+    if (!allowedChars.test(event.target.value)) {
+        nameInput.value = event.target.value.replace(/[^a-zA-Z0-9 \-]/g, '');
+    }
+    slugInput.value = event.target.value.toLowerCase().replaceAll(' ','-');
+  }
+
+  function handleSiteSlugChange(event) {
+    const slugInput = document.getElementById("site_slug_input");
+    const allowedChars = /^[a-z0-9\-]*$/;
+    if (!allowedChars.test(event.target.value)) {
+        slugInput.value = event.target.value.replace(/[^a-z0-9\-]/g, '');
+    }
+  }
+
+  function openActivateModal(event) {
+    const modal = document.getElementById("activate_modal");
+    modal.style.display = "block";
+  }
+
+  function openRestartModal(event) {
+    const modal = document.getElementById("restart_modal");
+    modal.style.display = "block";
+  }
+
+  function openDnsModal(event) {
+    const modal = document.getElementById("dns_modal");
+    modal.style.display = "block";
+  }
+
+  function openViewPlans(event) {
+    window.open('/account/#/portal/account/plans/', '_self');
+    let intervalId = setInterval(function() {
+      const portalRoot = document.getElementById('ghost-portal-root');
+      if (portalRoot && portalRoot.children.length === 0) {
+        clearInterval(intervalId);
+        location.reload();
+      }
+    }, 1000);
+  }
+
+  function closeActivateModal(event) {
+    const modal = document.getElementById("activate_modal");
+    modal.style.display = "none";
+  }
+
+  function closeRestartModal(event) {
+    const modal = document.getElementById("restart_modal");
+    modal.style.display = "none";
+  }
+
+  function closeDnsModal(event) {
+    const modal = document.getElementById("dns_modal");
+    modal.style.display = "none";
+  }
+
+  // Close modal when clicking outside of it
+  window.onclick = function(event) {
+    const activate_modal = document.getElementById("activate_modal");
+    const restart_modal = document.getElementById("restart_modal");
+    const dns_modal = document.getElementById("dns_modal");
+    if (event.target == activate_modal) {
+      activate_modal.style.display = "none";
+    }
+    if (event.target == restart_modal) {
+      restart_modal.style.display = "none";
+    }
+    if (event.target == dns_modal) {
+      dns_modal.style.display = "none";
+    }
+  }
+
+  function verifyDomain(event) {
+    event.preventDefault();
+    const button = event.target;
+    const spinner = button.querySelector('.fa-spinner');
+  
+    // Add a CSS class to disable the button
+    button.disabled = true;
+    button.classList.add('disabled');
+    spinner.style.display = 'inline-block';
+    
+    fetch('/account/verify/', {
+          method: 'GET',
+          headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+          }
+      })
+      .then(response => response.json())
+      .then(shop => {
+        console.log(shop);
+        const customDomainMessage = document.getElementById("custom_domain_message");
+        const domain_status = shop.domain_status;
+        if(domain_status) {
+          const domainStatusDisplayValue = document.getElementById("site_domain_status_display");
+          
+          domainStatusDisplayValue.innerHTML = domain_status;
+          if(domain_status === 'verified') {
+            domainStatusDisplayValue.style.backgroundColor = 'green';
+            customDomainMessage.innerHTML = "Custom domain has been verified.";
+            const buttonVerify = document.getElementById("button_verify");
+            buttonVerify.style.display = 'none';
+          } else {
+            customDomainMessage.innerHTML = "";
+          }
+          
+        } else {
+          // error verifying domain, please wait until the custom domain changes propigate and try again later or check your DNS changes
+          // click the instructions link to the left
+          customDomainMessage.innerHTML = "Error verifying domain, please wait until the custom domain changes propigate and try again later, or check your DNS changes click the instructions link to the left";
+        }
+        
+        // Remove the CSS class to enable the button
+        button.disabled = false;
+        button.classList.remove('disabled');
+        // Hide the spinner
+        spinner.style.display = 'none';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        
+        // Remove the CSS class to enable the button
+        button.disabled = false;
+        button.classList.remove('disabled');
+        
+        // Hide the spinner
+        spinner.style.display = 'none';
+      });
   }
 </script>
