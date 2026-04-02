@@ -1,11 +1,6 @@
-{{!< default}}
+{{#*inline "body"}}
 
-{{!-- The tag above means: insert everything in this file
-into the {body} tag of the default.hbs template --}}
-
-
-
-{{#cartanzacollection}}
+{{#with cartanzacollection}}
     
     <section class="article-header gh-canvas" data-animate="fade" style="margin-bottom: 30px;">
         <div class="" style="position: relative;text-align: center;z-index: 2;">
@@ -17,9 +12,9 @@ into the {body} tag of the default.hbs template --}}
     <div class="cartanza-collection-grid">
     {{#foreach products}}
     <div class="cartanza-collection-card">
-        {{#link href=(concat '/products/' slug '/') activeClass="current"}}
+        <a href="/products/{{slug}}">
         <div class="cartanza-collection-card-picture">
-            <img class="cartanza-collection-card-picture-background" src="/content/images/products/{{img_url images.[0].src}}" width="183" loading="lazy" alt="{{title}}">
+            <img class="cartanza-collection-card-picture-background" src="/content/images/products/{{images.[0].src}}" width="183" loading="lazy" alt="{{title}}">
         </div>
         <div class="cartanza-collection-card-info">
             <div>
@@ -31,9 +26,11 @@ into the {body} tag of the default.hbs template --}}
                 {{{description}}}
             </div>
         </div>
-        {{/link}}
+        </a>
     </div>
     {{/foreach}}
     </div>
-{{/cartanzacollection}}
+{{/with}}
 
+{{/inline}}
+{{> default}}

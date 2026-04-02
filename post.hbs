@@ -1,25 +1,24 @@
-{{!< default}}
-
+{{#*inline "body"}}
 {{!-- The tag above means: insert everything in this file
 into the {body} tag of the default.hbs template --}}
 
 
-{{#post}}
+{{#with post}}
 {{!-- Everything inside the #post block pulls data from the post --}}
 
 <main id="site-main" class="site-main">
-<article class="article {{post_class}} {{#match @custom.post_image_style "Full"}}image-full{{else match @custom.post_image_style "=" "Small"}}image-small{{/match}}">
+<article class="article {{post_class}} {{#match @root.custom.post_image_style "Full"}}image-full{{else match @root.custom.post_image_style "=" "Small"}}image-small{{/match}}">
 
     <header class="article-header gh-canvas">
 
         <div class="article-tag post-card-tags">
-            {{#primary_tag}}
+            {{#with primary_tag}}
                 <span class="post-card-primary-tag">
-                    <a href="{{url}}">{{name}}</a>
+                    <a href="/{{slug}}">{{name}}</a>
                 </span>
-            {{/primary_tag}}
+            {{/with}}
             {{#if featured}}
-                <span class="post-card-featured">{{> "icons/fire"}} Featured</span>
+                <span class="post-card-featured">{{> partials/icons/fire}} Featured</span>
             {{/if}}
         </div>
 
@@ -36,20 +35,20 @@ into the {body} tag of the default.hbs template --}}
                 {{#foreach authors}}
                 <li class="author-list-item">
                     {{#if profile_image}}
-                    <a href="{{url}}" class="author-avatar" aria-label="Read more of {{name}}">
+                    <a href="/{{slug}}" class="author-avatar" aria-label="Read more of {{name}}">
                         <img class="author-profile-image" src="{{img_url profile_image size="xs"}}" alt="{{name}}" />
                     </a>
                     {{else}}
-                    <a href="{{url}}" class="author-avatar author-profile-image" aria-label="Read more of {{name}}">{{> "icons/avatar"}}</a>
+                    <a href="/{{slug}}" class="author-avatar author-profile-image" aria-label="Read more of {{name}}">{{> partials/icons/avatar}}</a>
                     {{/if}}
                 </li>
                 {{/foreach}}
             </ul>
 
             <div class="article-byline-meta">
-                <h4 class="author-name">{{authors}}</h4>
+                <h4 class="author-name">{{#foreach authors}}{{#if @first}}{{name}}{{else}}, {{name}}{{/if}}{{/foreach}}</h4>
                 <div class="byline-meta-content">
-                    <time class="byline-meta-date" datetime="{{date format="YYYY-MM-DD"}}">{{date}}</time>
+                    <time class="byline-meta-date" datetime="{{date published_at format="YYYY-MM-DD"}}">{{date}}</time>
                     {{#if reading_time}}
                         <span class="byline-reading-time"><span class="bull">&bull;</span> {{reading_time}}</span>
                     {{/if}}
@@ -59,7 +58,7 @@ into the {body} tag of the default.hbs template --}}
         </section>
         </div>
 
-        {{#match @custom.post_image_style "!=" "Hidden"}}
+        {{#match @root.custom.post_image_style "!=" "Hidden"}}
         {{#if feature_image}}
             <figure class="article-image">
                 {{!-- This is a responsive image, it loads different sizes depending on device
@@ -83,7 +82,7 @@ into the {body} tag of the default.hbs template --}}
     </header>
 
     <section class="gh-content gh-canvas">
-        {{content}}
+        {{{content}}}
     </section>
 
     {{#if comments}}
@@ -96,13 +95,13 @@ into the {body} tag of the default.hbs template --}}
 </main>
 
 {{!-- A signup call to action is displayed here, unless viewed as a logged-in member --}}
-{{#if @site.members_enabled}}
-{{#unless @member}}
-{{#unless @site.comments_enabled}}
+{{#if @root.site.members_enabled}}
+{{#unless @root.member}}
+{{#unless @root.site.comments_enabled}}
 {{#if access}}
     <section class="footer-cta outer">
         <div class="inner">
-            {{#if @custom.email_signup_text}}<h2 class="footer-cta-title">{{@custom.email_signup_text}}</h2>{{/if}}
+            {{#if @root.custom.email_signup_text}}<h2 class="footer-cta-title">{{@root.custom.email_signup_text}}</h2>{{/if}}
             <a class="footer-cta-button" href="#/portal" data-portal>
                 <div class="footer-cta-input">Enter your email</div>
                 <span>Subscribe</span>
@@ -116,7 +115,7 @@ into the {body} tag of the default.hbs template --}}
 
 
 {{!-- Read more links, just above the footer --}}
-{{#if @custom.show_recent_posts_footer}}
+{{#if @root.custom.show_recent_posts_footer}}
     {{!-- The {#get} helper below fetches some of the latest posts here
     so that people have something else to read when they finish this one.
 
@@ -128,7 +127,7 @@ into the {body} tag of the default.hbs template --}}
             <aside class="read-more-wrap outer">
                 <div class="read-more inner">
                     {{#foreach more_posts}}
-                        {{> "post-card"}}
+                        {{> partials/post-card}}
                     {{/foreach}}
                 </div>
             </aside>
@@ -137,4 +136,6 @@ into the {body} tag of the default.hbs template --}}
     {{/get}}
 {{/if}}
 
-{{/post}}
+{{/with}}
+{{/inline}}
+{{> default}}

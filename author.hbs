@@ -1,4 +1,4 @@
-{{!< default}}
+{{#*inline "body"}}
 {{!-- The tag above means - insert everything in this file into the {body} of the default.hbs template --}}
 
 <main id="site-main" class="site-main outer">
@@ -6,7 +6,7 @@
 
     <div class="post-feed">
 
-        {{#author}}
+        {{#with author}}
         <section class="post-card post-card-large">
 
             {{#if cover_image}}
@@ -49,10 +49,10 @@
                             <a class="author-profile-social-link" href="{{website}}" target="_blank" rel="noopener">{{website}}</a>
                         {{/if}}
                         {{#if twitter}}
-                            <a class="author-profile-social-link" href="{{twitter_url}}" target="_blank" rel="noopener">{{> "icons/twitter"}}</a>
+                            <a class="author-profile-social-link" href="{{twitter_url}}" target="_blank" rel="noopener">{{> partials/icons/twitter}}</a>
                         {{/if}}
                         {{#if facebook}}
-                            <a class="author-profile-social-link" href="{{facebook_url}}" target="_blank" rel="noopener">{{> "icons/facebook"}}</a>
+                            <a class="author-profile-social-link" href="{{facebook_url}}" target="_blank" rel="noopener">{{> partials/icons/facebook}}</a>
                         {{/if}}
                     </div>
                 </footer>
@@ -61,11 +61,11 @@
             </div>
 
         </section>
-        {{/author}}
+        {{/with}}
 
         {{#foreach posts}}
             {{!-- The tag below includes the markup for each post - partials/post-card.hbs --}}
-            {{> "post-card"}}
+            {{> partials/post-card}}
         {{/foreach}}
 
     </div>
@@ -74,3 +74,5 @@
     
 </div>
 </main>
+{{/inline}}
+{{> default}}

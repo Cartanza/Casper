@@ -1418,7 +1418,10 @@ is the very first element in the post content */
 
 .gh-content .kg-product-card .kg-product-card-description > p,
 .gh-content .kg-product-card .kg-product-card-description > ol,
-.gh-content .kg-product-card .kg-product-card-description > ul {
+.gh-content .kg-product-card .kg-product-card-description > ul,
+.gh-content .kg-product-collection-card .kg-product-card-description > p,
+.gh-content .kg-product-collection-card .kg-product-card-description > ol,
+.gh-content .kg-product-collection-card .kg-product-card-description > ul  {
     font-size: 1.7rem;
     line-height: 1.6em;
 }
@@ -1450,7 +1453,9 @@ is the very first element in the post content */
 .gh-content .kg-toggle-card .kg-toggle-content > ol,
 .gh-content .kg-toggle-card .kg-toggle-content > ul,
 .gh-content .kg-product-card .kg-product-card-description > ol,
-.gh-content .kg-product-card .kg-product-card-description > ul {
+.gh-content .kg-product-card .kg-product-card-description > ul,
+.gh-content .kg-product-collection-card .kg-product-card-description > ol,
+.gh-content .kg-product-collection-card .kg-product-card-description > ul {
     padding-left: 1.9em;
 }
 
@@ -1516,7 +1521,10 @@ is the very first element in the post content */
 
     .gh-content .kg-product-card .kg-product-card-description > p,
     .gh-content .kg-product-card .kg-product-card-description > ol,
-    .gh-content .kg-product-card .kg-product-card-description > ul {
+    .gh-content .kg-product-card .kg-product-card-description > ul,
+    .gh-content .kg-product-collection-card .kg-product-card-description > p,
+    .gh-content .kg-product-collection-card .kg-product-card-description > ol,
+    .gh-content .kg-product-collection-card .kg-product-card-description > ul  {
         font-size: 1.6rem;
     }
 

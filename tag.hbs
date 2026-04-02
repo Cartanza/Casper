@@ -1,11 +1,10 @@
-{{!< default}}
-{{!-- The tag above means - insert everything in this file into the {body} of the default.hbs template --}}
+{{#*inline "body"}}
 
 <main id="site-main" class="site-main outer">
 <div class="inner posts">
     <div class="post-feed">
 
-        {{#tag}}
+        {{#with tag}}
         <section class="post-card post-card-large">
 
             {{#if feature_image}}
@@ -19,7 +18,7 @@
                             {{img_url feature_image size="xl"}} 2000w"
                     sizes="(max-width: 1000px) 400px, 800px"
                     src="{{img_url feature_image size="m"}}"
-                    alt="{{title}}"
+                    alt="{{name}}"
                 />
             </div>
             {{/if}}
@@ -33,18 +32,18 @@
                     {{#if description}}
                         {{description}}
                     {{else}}
-                        A collection of {{plural ../pagination.total empty='zero posts' singular='% post' plural='% posts'}}
+                        A collection of posts
                     {{/if}}
                 </div>
             </div>
             </div>
 
         </section>
-        {{/tag}}
+        {{/with}}
 
         {{#foreach posts}}
             {{!-- The tag below includes the markup for each post - partials/post-card.hbs --}}
-            {{> "post-card"}}
+            {{> partials/post-card}}
         {{/foreach}}
 
     </div>
@@ -53,3 +52,5 @@
     
 </div>
 </main>
+{{/inline}}
+{{> default}}
